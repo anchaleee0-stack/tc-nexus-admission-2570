@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC NEXUS 2570 | ระบบรับสมัครนักศึกษาอัจฉริยะ - วิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                        sarabun: ['Sarabun', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#ef4444',
+                            blue: '#3b82f6',
+                            gold: '#f59e0b',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950 relative overflow-x-hidden transition-colors duration-300">
+
+    <!-- Futuristic Cosmic Starfield & Shooting Stars Background (Hidden on Print) -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden no-print">
+        <div class="aurora-blob blob-1"></div>
+        <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
+        <div class="bg-grid-pattern absolute inset-0 opacity-20"></div>
+        <!-- 60FPS Twinkling Stars & Shooting Meteors Canvas -->
+        <canvas id="starfieldCanvas" class="absolute inset-0 w-full h-full"></canvas>
+        <!-- Pure CSS Shooting Stars Layer -->
+        <div class="shooting-stars-layer">
+            <span class="shooting-star star-gold-1"></span>
+            <span class="shooting-star star-blue-1"></span>
+            <span class="shooting-star star-gold-2"></span>
+            <span class="shooting-star star-blue-2"></span>
+            <span class="shooting-star star-gold-3"></span>
+            <span class="shooting-star star-blue-3"></span>
+        </div>
+    </div>
+
+    <!-- Top Futuristic Command Header (Hidden in Print) -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-slate-950/80 dark:bg-slate-950/80 light:bg-white/80 border-b border-blue-500/20 shadow-2xl no-print">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                <!-- Logo & Futuristic Brand Identity -->
+                <div class="flex items-center space-x-3.5 cursor-pointer group" onclick="switchTab('apply')">
+                    <div class="relative">
+                        <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-amber-500 opacity-80 blur group-hover:opacity-100 transition duration-500 animate-pulse"></div>
+                        <div class="relative bg-white p-1.5 rounded-full shadow-xl flex-shrink-0">
+                            <img src="logo.png" alt="Logo" class="h-11 w-11 object-contain" onerror="this.src='https://via.placeholder.com/48?text=TC'">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest bg-gradient-to-r from-blue-600 via-blue-500 to-amber-400 text-white px-2.5 py-0.5 rounded-full font-bold shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-yellow-300 animate-ping"></span>
+                                TC NEXUS • QUOTA 2570
+                            </span>
+                            <span class="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono text-amber-300 bg-blue-950/80 border border-amber-400/30 px-2 py-0.5 rounded-md">
+                                <i data-lucide="sparkles" class="w-3 h-3 text-yellow-400"></i> Blue & Gold Cosmic AI
+                            </span>
+                        </div>
+                        <h1 class="text-base sm:text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-yellow-200 to-amber-400 mt-0.5">
+                            วิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์
+                        </h1>
+                        <p class="text-[11px] text-blue-200/70 hidden lg:block">Next-Gen Smart Admission & Real-Time Automated Document Platform</p>
+                    </div>
+                </div>
+
+                <!-- Center Navigation Dock -->
+                <nav class="hidden xl:flex items-center space-x-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-blue-500/20 shadow-inner">
+                    <button onclick="switchTab('apply')" id="nav-apply" class="nav-pill active flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                        <span>สมัครเรียน + Live PDF</span>
+                    </button>
+                    <button onclick="switchTab('status')" id="nav-status" class="nav-pill flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i data-lucide="scan-search" class="w-4 h-4 text-blue-400"></i>
+                        <span>ติดตามสถานะ / พิมพ์เอกสาร</span>
+                    </button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-pill flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i data-lucide="radar" class="w-4 h-4 text-yellow-400"></i>
+                        <span>แดชบอร์ดสถิติ</span>
+                    </button>
+                    <button onclick="switchTab('admin')" id="nav-admin" class="nav-pill flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+                        <span>ระบบจัดการเจ้าหน้าที่</span>
+                        <span id="admin-badge" class="bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full shadow">0</span>
+                        <i id="nav-admin-lock" data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
+                    </button>
+                </nav>
+
+                <!-- Right Quick Actions: Staff Login (Top Right), Command Palette + Theme Toggle -->
+                <div class="flex items-center space-x-2.5">
+                    <button onclick="openCommandPalette()" class="hidden md:inline-flex items-center space-x-2 bg-slate-900/90 hover:bg-slate-800 text-slate-300 border border-blue-500/20 px-3 py-2 rounded-xl text-xs transition shadow-sm group" title="ค้นหาด่วน (Ctrl+K)">
+                        <i data-lucide="terminal" class="w-3.5 h-3.5 text-yellow-400 group-hover:scale-110 transition"></i>
+                        <span class="hidden lg:inline">ค้นหาด่วน</span>
+                        <kbd class="bg-slate-800 text-amber-300 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-mono">Ctrl K</kbd>
+                    </button>
+
+                    <button onclick="toggleThemeMode()" id="themeToggleBtn" class="p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-blue-500/20 text-yellow-400 transition" title="สลับโหมดมืด/สว่าง (Cosmic Blue-Gold Dark / Clean Light)">
+                        <i data-lucide="sun-moon" class="w-4 h-4"></i>
+                    </button>
+
+                    <!-- STAFF LOGIN BUTTON / LOGGED-IN PROFILE BADGE (TOP-RIGHT CORNER) -->
+                    <div id="staffAuthHeaderArea" class="flex items-center">
+                        <!-- State 1: Not Logged In -->
+                        <button id="btnTopStaffLogin" onclick="openStaffLoginModal()" class="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 px-4 py-2.5 rounded-xl text-xs font-extrabold shadow-lg shadow-amber-400/25 transition transform hover:-translate-y-0.5">
+                            <i data-lucide="key-round" class="w-4 h-4"></i>
+                            <span>เข้าสู่ระบบเจ้าหน้าที่</span>
+                        </button>
+
+                        <!-- State 2: Logged In as Staff/Admin -->
+                        <div id="staffLoggedInBadge" class="hidden items-center space-x-2 bg-emerald-500/15 border border-emerald-400/40 px-3 py-1.5 rounded-xl">
+                            <button onclick="switchTab('admin')" class="flex items-center space-x-2 text-left group">
+                                <div class="w-7 h-7 rounded-lg bg-emerald-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shadow">
+                                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                                </div>
+                                <div class="hidden sm:block leading-tight">
+                                    <div id="staffDisplayName" class="text-xs font-bold text-white group-hover:text-emerald-300 transition">อ.งานทะเบียน</div>
+                                    <div class="text-[10px] font-mono text-emerald-400">Admin Verified • คลิกจัดการ</div>
+                                </div>
+                            </button>
+                            <button onclick="handleStaffLogout()" class="p-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 transition" title="ออกจากระบบเจ้าหน้าที่">
+                                <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Trigger -->
+                    <button onclick="toggleMobileMenu()" class="xl:hidden p-2.5 rounded-xl bg-slate-900/90 border border-white/15 text-white">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden xl:hidden bg-slate-950/95 backdrop-blur-2xl px-4 pt-3 pb-5 space-y-2 border-t border-white/10">
+            <button onclick="switchTab('apply'); toggleMobileMenu()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-white bg-white/10">
+                <span class="flex items-center gap-2.5"><i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i> 1. กรอกใบสมัครเรียน + Live PDF Twin</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <button onclick="switchTab('status'); toggleMobileMenu()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-white/5">
+                <span class="flex items-center gap-2.5"><i data-lucide="scan-search" class="w-4 h-4 text-cyan-400"></i> 2. ตรวจสอบสถานะ / พิมพ์ใบสมัคร</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <button onclick="switchTab('dashboard'); toggleMobileMenu()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-white/5">
+                <span class="flex items-center gap-2.5"><i data-lucide="radar" class="w-4 h-4 text-emerald-400"></i> 3. แดชบอร์ดสถิติอัจฉริยะ (แยกแผนกวิชา)</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+            <button onclick="switchTab('admin'); toggleMobileMenu()" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-slate-300 hover:bg-white/5">
+                <span class="flex items-center gap-2.5"><i data-lucide="shield-check" class="w-4 h-4 text-rose-400"></i> 4. ระบบจัดการสำหรับเจ้าหน้าที่ (Back-End)</span>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10 no-print">
+
+        <!-- =========================================================================
+             VIEW 1: FUTURISTIC APPLICATION FORM + REAL-TIME DIGITAL TWIN PDF PREVIEW
+             ========================================================================= -->
+        <section id="view-apply" class="tab-view space-y-6">
+            <!-- Futuristic Hero Banner with AI Smart Actions -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-white/15 relative overflow-hidden shadow-2xl">
+                <div class="absolute -right-16 -top-16 w-72 h-72 bg-gradient-to-br from-cyan-500/20 via-blue-600/20 to-red-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="space-y-2.5 max-w-3xl">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="inline-flex items-center space-x-1.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-semibold">
+                                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                                <span>REAL-TIME DIGITAL TWIN PAPER</span>
+                            </span>
+                            <span class="inline-flex items-center space-x-1.5 bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 px-3 py-1 rounded-full text-xs font-mono">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                                <span>Auto-Validation 100%</span>
+                            </span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                            ระบบรับสมัครคัดเลือกศึกษาต่อกรณีพิเศษ (โควตา) ปีการศึกษา ๒๕๗๐
+                        </h2>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            สัมผัสประสบการณ์กรอกใบสมัครยุคใหม่: พิมพ์ข้อมูลด้านซ้าย <strong class="text-cyan-300">ใบสมัครจริงขนาด A4 ด้านขวาจะถูกเขียนแบบเรียลไทม์ตัวอักษรต่อตัวอักษร</strong> พร้อมระบบจำลองสแกนบัตรประชาชนอัจฉริยะ (Smart ID OCR) และระบบแนะนำสาขาวิชาด้วย AI
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2.5 flex-shrink-0">
+                        <button type="button" onclick="triggerSmartOcrScan()" class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold px-4 py-3 rounded-2xl text-xs transition shadow-lg shadow-cyan-500/25">
+                            <i data-lucide="scan-face" class="w-4 h-4"></i>
+                            <span>AI สแกนบัตร ปชช. กรอกอัตโนมัติ</span>
+                        </button>
+                        <button type="button" onclick="openAiAdvisorModal()" class="inline-flex items-center space-x-2 bg-slate-800/90 hover:bg-slate-700 text-amber-300 border border-amber-400/30 px-4 py-3 rounded-2xl text-xs font-semibold transition">
+                            <i data-lucide="bot" class="w-4 h-4"></i>
+                            <span>AI แนะนำแผนกวิชาที่เหมาะกับคุณ</span>
+                        </button>
+                        <button type="button" onclick="toggleLiveTwinPanel()" id="btnToggleTwin" class="hidden xl:inline-flex items-center space-x-2 bg-white/10 hover:bg-white/15 text-white border border-white/15 px-4 py-3 rounded-2xl text-xs font-semibold transition">
+                            <i data-lucide="columns" class="w-4 h-4 text-cyan-400"></i>
+                            <span>ซ่อน/แสดง กระดาษ A4 สด</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Completion Progress Bar -->
+                <div class="mt-6 pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xs font-mono uppercase tracking-wider text-yellow-400 font-bold">Form Completion:</span>
+                        <span id="formProgressText" class="text-xs font-mono bg-amber-500/20 text-amber-300 border border-amber-400/30 px-2.5 py-0.5 rounded-md font-bold">25% พร้อมใช้งาน</span>
+                    </div>
+                    <div class="flex-grow max-w-xl bg-slate-800/90 h-2.5 rounded-full overflow-hidden p-0.5 border border-white/10">
+                        <div id="formProgressBar" class="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-yellow-400 rounded-full transition-all duration-500" style="width: 25%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Split Layout: Left Form (7 Cols) + Right Live A4 Twin Preview (5 Cols) -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+
+                <!-- LEFT COLUMN: APPLICATION FORM -->
+                <div id="formColumnContainer" class="xl:col-span-7 space-y-6">
+                    <form id="applicationForm" onsubmit="handleApplicationSubmit(event)" oninput="updateLiveTwinAndProgress()" class="space-y-6">
+
+                        <!-- Step 1: ระดับการศึกษาและสาขาวิชา -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-red-600 to-amber-500 text-white font-mono font-bold flex items-center justify-center text-sm shadow">01</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">ระดับการศึกษาและแผนกวิชาที่ต้องการสมัคร</h3>
+                                        <p class="text-[11px] text-slate-400">คลิกเลือกระดับชั้น ระบบจะทำเครื่องหมาย ✓ ลงในใบสมัคร A4 ทันที</p>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-400/20">ข้อ ๖ ในแบบฟอร์ม</span>
+                            </div>
+
+                            <div class="p-6 space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                                    <label class="level-card relative flex items-start p-4 rounded-2xl border border-white/15 bg-slate-900/50 cursor-pointer hover:border-cyan-400/60 transition has-[:checked]:border-cyan-400 has-[:checked]:bg-cyan-500/10 has-[:checked]:shadow-lg has-[:checked]:shadow-cyan-500/10">
+                                        <input type="radio" name="applyLevel" value="ปวช." checked onchange="handleLevelChange(); updateLiveTwinAndProgress();" class="mt-1 h-4 w-4 accent-cyan-400">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-white">ระดับ ปวช.</span>
+                                            <span class="block text-[11px] text-slate-400 mt-0.5">ผู้กำลังศึกษา ม.3 (เลือกได้ 2 อันดับ)</span>
+                                        </div>
+                                    </label>
+                                    <label class="level-card relative flex items-start p-4 rounded-2xl border border-white/15 bg-slate-900/50 cursor-pointer hover:border-cyan-400/60 transition has-[:checked]:border-cyan-400 has-[:checked]:bg-cyan-500/10 has-[:checked]:shadow-lg has-[:checked]:shadow-cyan-500/10">
+                                        <input type="radio" name="applyLevel" value="ปวส. (สายตรง)" onchange="handleLevelChange(); updateLiveTwinAndProgress();" class="mt-1 h-4 w-4 accent-cyan-400">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-white">ปวส. (สายตรง)</span>
+                                            <span class="block text-[11px] text-slate-400 mt-0.5">ผู้จบ ปวช. สาขาตรงกับแผนกวิชา</span>
+                                        </div>
+                                    </label>
+                                    <label class="level-card relative flex items-start p-4 rounded-2xl border border-white/15 bg-slate-900/50 cursor-pointer hover:border-cyan-400/60 transition has-[:checked]:border-cyan-400 has-[:checked]:bg-cyan-500/10 has-[:checked]:shadow-lg has-[:checked]:shadow-cyan-500/10">
+                                        <input type="radio" name="applyLevel" value="ปวส. (ม.6/ปวช. ต่างสาขา)" onchange="handleLevelChange(); updateLiveTwinAndProgress();" class="mt-1 h-4 w-4 accent-cyan-400">
+                                        <div class="ml-3">
+                                            <span class="block text-sm font-bold text-white">ปวส. (ม.6/ต่างสาขา)</span>
+                                            <span class="block text-[11px] text-slate-400 mt-0.5">ผู้จบ ม.6 หรือ ปวช. ต่างสาขา</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label id="label-dept-1" class="block text-xs font-semibold text-slate-300 mb-1.5">สาขาวิชาอันดับที่ 1 (แผนกวิชาหลัก) <span class="text-rose-400">*</span></label>
+                                        <select id="deptChoice1" required onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-4 py-2.5 text-sm">
+                                            <option value="">-- เลือกแผนกวิชา/สาขาวิชา --</option>
+                                        </select>
+                                    </div>
+                                    <div id="dept2-container">
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">สาขาวิชาอันดับที่ 2 (สำรองสำหรับ ปวช.)</label>
+                                        <select id="deptChoice2" onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-4 py-2.5 text-sm">
+                                            <option value="">-- ไม่ระบุ / เลือกสาขาวิชาสำรอง --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: ข้อมูลผู้สมัคร และ บิดา-มารดา (ข้อ 1 - 3) -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-white font-mono font-bold flex items-center justify-center text-sm shadow">02</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">ข้อมูลประวัติผู้สมัคร และข้อมูลบิดา-มารดา</h3>
+                                        <p class="text-[11px] text-slate-400">ตรวจสอบเลขบัตรประชาชน 13 หลักด้วยอัลกอริทึม Checksum มาตรฐานกรมการปกครอง</p>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 px-2.5 py-1 rounded-lg border border-cyan-400/20">ข้อ ๑ - ข้อ ๓</span>
+                            </div>
+
+                            <div class="p-6 space-y-5">
+                                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                                    <div class="md:col-span-5">
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">เลขประจำตัวประชาชน (13 หลัก) <span class="text-rose-400">*</span></label>
+                                        <div class="relative">
+                                            <input type="text" id="citizenId" maxlength="13" required placeholder="กรอกตัวเลข 13 หลัก" oninput="validateCitizenIdInput(this); updateLiveTwinAndProgress();" class="cyber-input w-full rounded-xl px-4 py-2.5 text-sm font-mono tracking-wider">
+                                            <span id="cid-status" class="absolute right-3 top-2.5 text-xs font-mono text-slate-400">0/13</span>
+                                        </div>
+                                        <p id="cid-error" class="text-[11px] text-rose-400 mt-1 hidden">เลขบัตรประชาชนต้องครบ 13 หลัก</p>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">คำนำหน้า <span class="text-rose-400">*</span></label>
+                                        <select id="prefix" required onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-3 py-2.5 text-sm">
+                                            <option value="นาย">นาย</option>
+                                            <option value="นางสาว">นางสาว</option>
+                                            <option value="เด็กชาย">เด็กชาย</option>
+                                            <option value="เด็กหญิง">เด็กหญิง</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">ชื่อจริง <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="firstName" required placeholder="ชื่อจริง" class="cyber-input w-full rounded-xl px-3.5 py-2.5 text-sm">
+                                    </div>
+                                    <div class="md:col-span-3">
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">นามสกุล <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="lastName" required placeholder="นามสกุล" class="cyber-input w-full rounded-xl px-3.5 py-2.5 text-sm">
+                                    </div>
+                                </div>
+
+                                <!-- วันเดือนปีเกิด -->
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900/60 p-4 rounded-2xl border border-white/10">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1">เกิดวันที่ <span class="text-rose-400">*</span></label>
+                                        <select id="birthDay" required onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-3 py-2 text-sm"></select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1">เดือนเกิด <span class="text-rose-400">*</span></label>
+                                        <select id="birthMonth" required onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                            <option value="มกราคม">มกราคม</option>
+                                            <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                                            <option value="มีนาคม">มีนาคม</option>
+                                            <option value="เมษายน">เมษายน</option>
+                                            <option value="พฤษภาคม">พฤษภาคม</option>
+                                            <option value="มิถุนายน">มิถุนายน</option>
+                                            <option value="กรกฎาคม">กรกฎาคม</option>
+                                            <option value="สิงหาคม">สิงหาคม</option>
+                                            <option value="กันยายน">กันยายน</option>
+                                            <option value="ตุลาคม">ตุลาคม</option>
+                                            <option value="พฤศจิกายน">พฤศจิกายน</option>
+                                            <option value="ธันวาคม">ธันวาคม</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-1">ปี พ.ศ. เกิด <span class="text-rose-400">*</span></label>
+                                        <input type="number" id="birthYear" required min="2530" max="2560" value="2554" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                    </div>
+                                </div>
+
+                                <!-- บิดา & มารดา -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="p-4 rounded-2xl bg-slate-900/50 border border-white/10 space-y-3">
+                                        <h4 class="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <i data-lucide="user-check" class="w-4 h-4"></i> ข้อมูลบิดา (ข้อ ๒)
+                                        </h4>
+                                        <div>
+                                            <label class="block text-xs text-slate-300 mb-1">ชื่อ-สกุลบิดา <span class="text-rose-400">*</span></label>
+                                            <input type="text" id="fatherName" required placeholder="นาย..." class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2.5">
+                                            <div>
+                                                <label class="block text-xs text-slate-300 mb-1">อายุ (ปี)</label>
+                                                <input type="number" id="fatherAge" placeholder="45" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs text-slate-300 mb-1">อาชีพ</label>
+                                                <input type="text" id="fatherJob" placeholder="เช่น รับจ้าง" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-4 rounded-2xl bg-slate-900/50 border border-white/10 space-y-3">
+                                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                            <i data-lucide="heart-handshake" class="w-4 h-4"></i> ข้อมูลมารดา (ข้อ ๓)
+                                        </h4>
+                                        <div>
+                                            <label class="block text-xs text-slate-300 mb-1">ชื่อ-สกุลมารดา <span class="text-rose-400">*</span></label>
+                                            <input type="text" id="motherName" required placeholder="นาง/นางสาว..." class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2.5">
+                                            <div>
+                                                <label class="block text-xs text-slate-300 mb-1">อายุ (ปี)</label>
+                                                <input type="number" id="motherAge" placeholder="42" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs text-slate-300 mb-1">อาชีพ</label>
+                                                <input type="text" id="motherJob" placeholder="เช่น ค้าขาย" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: ที่อยู่ปัจจุบันและเบอร์ติดต่อ (ข้อ 4) -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-mono font-bold flex items-center justify-center text-sm shadow">03</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">ที่อยู่ปัจจุบันที่ติดต่อได้ และเบอร์โทรศัพท์</h3>
+                                        <p class="text-[11px] text-slate-400">บังคับรูปแบบรหัสไปรษณีย์ 5 หลัก และเบอร์มือถือ 10 หลัก</p>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-400/20">ข้อ ๔</span>
+                            </div>
+
+                            <div class="p-6">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-12 gap-3.5">
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">บ้านเลขที่ <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="addrNo" required placeholder="123/4" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">หมู่ที่</label>
+                                        <input type="text" id="addrMoo" placeholder="5" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-4">
+                                        <label class="block text-xs text-slate-300 mb-1">ตรอก/ซอย</label>
+                                        <input type="text" id="addrSoi" placeholder="-" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-4">
+                                        <label class="block text-xs text-slate-300 mb-1">ถนน</label>
+                                        <input type="text" id="addrRoad" placeholder="-" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+
+                                    <div class="col-span-1 md:col-span-3">
+                                        <label class="block text-xs text-slate-300 mb-1">ตำบล/แขวง <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="addrSubdistrict" required placeholder="ท่าหลวง" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-3">
+                                        <label class="block text-xs text-slate-300 mb-1">อำเภอ/เขต <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="addrDistrict" required placeholder="ท่าเรือ" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-2 md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">จังหวัด <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="addrProvince" required placeholder="พระนครศรีอยุธยา" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">รหัสไปรษณีย์ <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="addrZip" maxlength="5" required placeholder="13130" oninput="this.value=this.value.replace(/[^0-9]/g,'')" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                    </div>
+                                    <div class="col-span-1 md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">โทรศัพท์ (10 หลัก) <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="phone" maxlength="10" required placeholder="08XXXXXXXX" oninput="validatePhoneInput(this)" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: ข้อมูลโรงเรียนเดิมและผลการเรียน (ข้อ 5) -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 text-white font-mono font-bold flex items-center justify-center text-sm shadow">04</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">ข้อมูลสถานศึกษาเดิม และเกรดเฉลี่ยสะสม (GPAX)</h3>
+                                        <p class="text-[11px] text-slate-400">ข้อมูลผลการเรียนเฉลี่ยสะสม 5 ภาคเรียน (ข้อ ๕ ในแบบฟอร์ม)</p>
+                                    </div>
+                                </div>
+                                <span class="text-[11px] font-mono text-purple-300 bg-purple-500/10 px-2.5 py-1 rounded-lg border border-purple-400/20">ข้อ ๕</span>
+                            </div>
+
+                            <div class="p-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3.5">
+                                    <div class="md:col-span-3">
+                                        <label class="block text-xs text-slate-300 mb-1">กำลังศึกษาชั้น <span class="text-rose-400">*</span></label>
+                                        <select id="currentGrade" required onchange="updateLiveTwinAndProgress()" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                            <option value="ม.3">มัธยมศึกษาปีที่ 3 (ม.3)</option>
+                                            <option value="ปวช.3">ปวช.3</option>
+                                            <option value="ม.6">มัธยมศึกษาปีที่ 6 (ม.6)</option>
+                                            <option value="กศน.">กศน. / เทียบเท่า</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-5">
+                                        <label class="block text-xs text-slate-300 mb-1">โรงเรียน/สถานศึกษาเดิม <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="schoolName" required placeholder="เช่น ท่าเรือ &quot;นิตยานุกูล&quot;" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">ตั้งอยู่เลขที่</label>
+                                        <input type="text" id="schoolNo" placeholder="112" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">ตำบล</label>
+                                        <input type="text" id="schoolSubdistrict" placeholder="ท่าเรือ" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+
+                                    <div class="md:col-span-3">
+                                        <label class="block text-xs text-slate-300 mb-1">อำเภอ <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="schoolDistrict" required placeholder="ท่าเรือ" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="md:col-span-3">
+                                        <label class="block text-xs text-slate-300 mb-1">จังหวัด <span class="text-rose-400">*</span></label>
+                                        <input type="text" id="schoolProvince" required placeholder="พระนครศรีอยุธยา" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs text-slate-300 mb-1">GPAX (5 เทอม) <span class="text-rose-400">*</span></label>
+                                        <input type="number" id="gpax" step="0.01" min="1.00" max="4.00" required placeholder="3.50" class="cyber-input w-full rounded-xl px-3 py-2 text-sm font-mono">
+                                    </div>
+                                    <div class="md:col-span-4">
+                                        <label class="block text-xs text-slate-300 mb-1">สาขาวิชาเดิม</label>
+                                        <input type="text" id="oldMajor" placeholder="เช่น วิทย์-คณิต / สามัญ" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                    </div>
+
+                                    <div class="md:col-span-12 pt-1">
+                                        <label class="block text-xs text-slate-300 mb-1">ช่องทางที่รู้จักการรับสมัครของวิทยาลัย (สำหรับวิเคราะห์ข้อมูลแนะแนว)</label>
+                                        <select id="referralChannel" class="cyber-input w-full rounded-xl px-3 py-2 text-sm">
+                                            <option value="ครูแนะแนวประจำโรงเรียน">ครูแนะแนว / คณะครูออกแนะแนวที่โรงเรียน</option>
+                                            <option value="เพจ Facebook / โซเชียลมีเดีย">เพจ Facebook วิทยาลัย / TikTok / โซเชียลมีเดีย</option>
+                                            <option value="รุ่นพี่ / ศิษย์เก่าแนะนำ">รุ่นพี่ / เพื่อน / ศิษย์เก่าแนะนำ</option>
+                                            <option value="ผู้ปกครองแนะนำ">ผู้ปกครองแนะนำ</option>
+                                            <option value="เว็บไซต์วิทยาลัย / ป้ายประชาสัมพันธ์">เว็บไซต์วิทยาลัย / ป้ายประชาสัมพันธ์</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: อัปโหลดเอกสารหลักฐาน -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-slate-950 font-mono font-bold flex items-center justify-center text-sm shadow">05</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">อัปโหลดไฟล์หลักฐานดิจิทัล</h3>
+                                        <p class="text-[11px] text-slate-400">รูปถ่าย 1 นิ้วจะปรากฏบนมุมขวาบนของใบสมัคร A4 ทันทีที่แนบไฟล์</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                                <!-- 1. รูปถ่าย -->
+                                <div class="p-4 rounded-2xl border border-dashed border-white/20 bg-slate-900/40 flex flex-col items-center text-center hover:border-cyan-400 transition">
+                                    <div id="preview-photo-box" class="w-16 h-20 bg-slate-800 border border-white/15 rounded-lg mb-2.5 flex items-center justify-center overflow-hidden">
+                                        <i data-lucide="camera" class="w-6 h-6 text-cyan-400"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-white">1. รูปถ่าย ๑ นิ้ว</span>
+                                    <span class="text-[10px] text-slate-400 mb-2.5">แสดงบนใบสมัคร PDF</span>
+                                    <label class="cursor-pointer bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition">
+                                        <span>อัปโหลดรูป</span>
+                                        <input type="file" id="filePhoto" accept="image/jpeg,image/png" onchange="handleFileUpload(this, 'photo')" class="hidden">
+                                    </label>
+                                    <span id="status-photo" class="text-[10px] text-emerald-400 mt-1.5 font-mono hidden">แนบแล้ว</span>
+                                </div>
+
+                                <!-- 2. รบ.1 -->
+                                <div class="p-4 rounded-2xl border border-dashed border-white/20 bg-slate-900/40 flex flex-col items-center justify-center text-center hover:border-cyan-400 transition">
+                                    <div class="w-11 h-11 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center mb-2.5">
+                                        <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-white">2. ใบ รบ.1 (5 เทอม)</span>
+                                    <span class="text-[10px] text-slate-400 mb-2.5">JPG, PNG, PDF</span>
+                                    <label class="cursor-pointer bg-white/10 hover:bg-white/15 text-slate-200 border border-white/15 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition">
+                                        <span>เลือกไฟล์</span>
+                                        <input type="file" id="fileTranscript" accept="image/jpeg,image/png,application/pdf" onchange="handleFileUpload(this, 'transcript')" class="hidden">
+                                    </label>
+                                    <span id="status-transcript" class="text-[10px] text-emerald-400 mt-1.5 font-mono hidden">แนบแล้ว</span>
+                                </div>
+
+                                <!-- 3. บัตร ปชช -->
+                                <div class="p-4 rounded-2xl border border-dashed border-white/20 bg-slate-900/40 flex flex-col items-center justify-center text-center hover:border-cyan-400 transition">
+                                    <div class="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-2.5">
+                                        <i data-lucide="id-card" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-white">3. บัตร ปชช./ทะเบียนบ้าน</span>
+                                    <span class="text-[10px] text-slate-400 mb-2.5">จำนวน ๑ ฉบับ</span>
+                                    <label class="cursor-pointer bg-white/10 hover:bg-white/15 text-slate-200 border border-white/15 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition">
+                                        <span>เลือกไฟล์</span>
+                                        <input type="file" id="fileIdCard" accept="image/jpeg,image/png,application/pdf" onchange="handleFileUpload(this, 'idcard')" class="hidden">
+                                    </label>
+                                    <span id="status-idcard" class="text-[10px] text-emerald-400 mt-1.5 font-mono hidden">แนบแล้ว</span>
+                                </div>
+
+                                <!-- 4. เกียรติบัตร -->
+                                <div class="p-4 rounded-2xl border border-dashed border-white/20 bg-slate-900/40 flex flex-col items-center justify-center text-center hover:border-cyan-400 transition">
+                                    <div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2.5">
+                                        <i data-lucide="award" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-white">4. เกียรติบัตร (ถ้ามี)</span>
+                                    <span class="text-[10px] text-slate-400 mb-2.5">ความสามารถพิเศษ</span>
+                                    <label class="cursor-pointer bg-white/10 hover:bg-white/15 text-slate-200 border border-white/15 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition">
+                                        <span>เลือกไฟล์</span>
+                                        <input type="file" id="fileCert" accept="image/jpeg,image/png,application/pdf" onchange="handleFileUpload(this, 'cert')" class="hidden">
+                                    </label>
+                                    <span id="status-cert" class="text-[10px] text-emerald-400 mt-1.5 font-mono hidden">แนบแล้ว</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: ลายเซ็นดิจิทัลบนหน้าจอ (Interactive Digital Signature Pad) -->
+                        <div class="glass-card rounded-2xl border border-white/10 overflow-hidden">
+                            <div class="bg-white/5 border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white font-mono font-bold flex items-center justify-center text-sm shadow">06</span>
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm sm:text-base">ลงลายมือชื่ออิเล็กทรอนิกส์ (Digital e-Signature Pad)</h3>
+                                        <p class="text-[11px] text-slate-400">ใช้นิ้วหรือเมาส์เซ็นชื่อในกรอบด้านล่าง ลายเซ็นจะไปปรากฏในช่อง "ลงชื่อ..........ผู้สมัคร" บนกระดาษ A4 ทันที (หรือเว้นว่างเพื่อใช้ชื่อพิมพ์แทน)</p>
+                                    </div>
+                                </div>
+                                <button type="button" onclick="clearSignaturePad()" class="text-xs text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1">
+                                    <i data-lucide="eraser" class="w-3.5 h-3.5"></i> ล้างลายเซ็น
+                                </button>
+                            </div>
+                            <div class="p-6 flex flex-col sm:flex-row items-center gap-4">
+                                <div class="bg-white rounded-xl p-1 border-2 border-cyan-400/50 shadow-inner w-full sm:w-80 h-28 relative">
+                                    <canvas id="signatureCanvas" width="310" height="100" class="w-full h-full cursor-crosshair touch-none"></canvas>
+                                    <span class="absolute bottom-1.5 right-2 text-[10px] text-slate-400 pointer-events-none select-none">เซ็นชื่อที่นี่ (Sign Here)</span>
+                                </div>
+                                <div class="text-xs text-slate-300 space-y-1.5">
+                                    <div class="flex items-center gap-2 text-emerald-400 font-semibold">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                                        <span>รองรับทั้งการเซ็นสดบนหน้าจอ และการพิมพ์ชื่ออัตโนมัติ</span>
+                                    </div>
+                                    <p class="text-slate-400 leading-relaxed">เมื่อกดบันทึกใบสมัคร ระบบจะสร้างไฟล์ PDF รายบุคคลตามแบบฟอร์มโควตาปีการศึกษา ๒๕๗๐ พร้อม QR Code สำหรับตรวจสอบสถานะทันที</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Bar -->
+                        <div class="glass-card p-6 rounded-2xl border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
+                            <div class="flex items-center space-x-3 text-xs text-slate-300">
+                                <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                </div>
+                                <span>ข้อมูลของคุณได้รับการตรวจสอบความถูกต้องอัตโนมัติ และพร้อมออกใบสมัคร PDF ทันที</span>
+                            </div>
+                            <div class="flex items-center gap-3 w-full sm:w-auto">
+                                <button type="reset" onclick="resetUploads(); clearSignaturePad(); setTimeout(updateLiveTwinAndProgress, 50);" class="px-4 py-3 rounded-xl border border-white/15 text-slate-300 hover:bg-white/10 text-xs font-semibold transition">
+                                    ล้างฟอร์ม
+                                </button>
+                                <button type="submit" class="flex-1 sm:flex-initial inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 px-7 py-3.5 rounded-xl text-sm font-extrabold shadow-xl shadow-amber-400/30 transition transform hover:-translate-y-0.5">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                    <span>บันทึกใบสมัคร & ออกรายงาน PDF</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RIGHT COLUMN: REAL-TIME DIGITAL TWIN A4 PAPER PREVIEW -->
+                <div id="liveTwinColumn" class="xl:col-span-5 xl:sticky xl:top-24 space-y-3">
+                    <div class="glass-card rounded-2xl border border-cyan-500/30 p-4 shadow-2xl">
+                        <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span class="text-xs font-bold text-white uppercase tracking-wider">Live Digital Twin (กระดาษใบสมัคร A4 สด)</span>
+                            </div>
+                            <span class="text-[11px] font-mono text-cyan-300 bg-cyan-950 border border-cyan-500/30 px-2 py-0.5 rounded">Real-Time Sync</span>
+                        </div>
+
+                        <!-- Scaled A4 Container so it fits cleanly inside the sticky right panel -->
+                        <div class="bg-slate-900/90 rounded-xl p-3 overflow-hidden flex justify-center border border-white/10">
+                            <div class="live-a4-scale-wrapper">
+                                <div id="live-twin-paper" class="a4-page bg-white text-black shadow-2xl font-sarabun">
+                                    <!-- Dynamically rendered as user types -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 flex items-center justify-between text-[11px] text-slate-400 px-1">
+                            <span>* พิมพ์ข้อมูลด้านซ้าย เอกสารด้านบนจะอัปเดตทันที</span>
+                            <button type="button" onclick="previewCurrentDraftInFullModal()" class="text-cyan-400 hover:underline font-semibold flex items-center gap-1">
+                                <i data-lucide="maximize-2" class="w-3 h-3"></i> ขยายเต็มจอ / สั่งพิมพ์ทันที
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             VIEW 2: VISUAL TIMELINE STATUS TRACKER & INSTANT PDF PORTAL
+             ========================================================================= -->
+        <section id="view-status" class="tab-view hidden space-y-6">
+            <div class="glass-card rounded-3xl border border-white/15 p-6 sm:p-8 shadow-2xl">
+                <div class="max-w-2xl mx-auto text-center space-y-3">
+                    <span class="inline-flex items-center space-x-1.5 bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 px-3.5 py-1 rounded-full text-xs font-mono">
+                        <i data-lucide="radar" class="w-3.5 h-3.5"></i>
+                        <span>REAL-TIME APPLICATION TRACKER & E-DOCUMENT PORTAL</span>
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">ติดตามสถานะการสมัครแบบ Timeline & ดาวน์โหลด PDF</h2>
+                    <p class="text-xs sm:text-sm text-slate-300">ค้นหาด้วยเลขบัตรประจำตัวประชาชน 13 หลัก, รหัสใบสมัคร หรือ ชื่อ-นามสกุล เพื่อดูความคืบหน้าทั้ง 4 ขั้นตอนและพิมพ์ใบสมัคร/ใบมอบตัว</p>
+
+                    <div class="flex flex-col sm:flex-row gap-2.5 pt-3">
+                        <input type="text" id="searchQueryInput" placeholder="กรอกเลขบัตรประชาชน 13 หลัก หรือ ชื่อผู้สมัคร..." onkeyup="if(event.key==='Enter') searchApplicantStatus()" class="cyber-input flex-grow rounded-2xl px-5 py-3.5 text-sm">
+                        <button onclick="searchApplicantStatus()" class="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 px-7 py-3.5 rounded-2xl text-sm font-extrabold transition shadow-lg shadow-cyan-500/20">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                            <span>ค้นหาสถานะ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results with 4-Step Visual Progress Stepper -->
+                <div id="statusResultsContainer" class="mt-8 space-y-4">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             VIEW 3: EXECUTIVE COMMAND CENTER & DEPARTMENT ANALYTICS DASHBOARD
+             ========================================================================= -->
+        <section id="view-dashboard" class="tab-view hidden space-y-6">
+            <!-- Command Header -->
+            <div class="glass-card rounded-3xl p-6 border border-white/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span class="text-xs font-mono uppercase tracking-widest text-cyan-400 font-bold">LIVE ADMISSION INTELLIGENCE CENTER</span>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-white mt-1">แดชบอร์ดสรุปสถิติแบบเรียลไทม์ (Dashboard & Analytics)</h2>
+                    <p class="text-xs text-slate-400">แสดงกราฟสรุปยอดผู้สมัครแยกตามแผนกวิชา ระดับชั้น โรงเรียนเดิม จังหวัด และช่องทางที่รู้จักวิทยาลัย (ผู้แนะนำแนะแนว)</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <select id="dashFilterYear" onchange="renderDashboard()" class="cyber-input rounded-xl px-3.5 py-2.5 text-xs font-semibold">
+                        <option value="ALL">ทุกปีการศึกษา (2570 + 2569)</option>
+                        <option value="2570" selected>ปีการศึกษา 2570</option>
+                        <option value="2569">ปีการศึกษา 2569</option>
+                    </select>
+                    <select id="dashFilterLevel" onchange="renderDashboard()" class="cyber-input rounded-xl px-4 py-2.5 text-xs font-semibold">
+                        <option value="ALL">ทุกระดับชั้น (ปวช. + ปวส.)</option>
+                        <option value="ปวช.">เฉพาะระดับ ปวช.</option>
+                        <option value="ปวส.">เฉพาะระดับ ปวส. (ทั้งหมด)</option>
+                    </select>
+                    <button onclick="renderDashboard()" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-cyan-300" title="อัปเดตกราฟ">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Futuristic KPI Bento Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card p-5 rounded-2xl border border-cyan-500/30 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">ยอดผู้สมัครรวมทั้งหมด</p>
+                            <h3 id="kpi-total" class="text-3xl font-mono font-extrabold text-white mt-1">0</h3>
+                            <span id="kpi-level-split" class="text-[11px] font-mono text-cyan-400 mt-1 block">ปวช. 0 | ปวส. 0</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 flex items-center justify-center">
+                            <i data-lucide="users" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-amber-500/30 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">รอตรวจ / เอกสารไม่ครบ</p>
+                            <h3 id="kpi-pending" class="text-3xl font-mono font-extrabold text-amber-400 mt-1">0</h3>
+                            <span class="text-[11px] text-amber-300/80 mt-1 block">ต้องตรวจสอบหลักฐาน</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/30 text-amber-300 flex items-center justify-center">
+                            <i data-lucide="clock" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-emerald-500/30 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">ผ่านการคัดเลือกแล้ว</p>
+                            <h3 id="kpi-approved" class="text-3xl font-mono font-extrabold text-emerald-400 mt-1">0</h3>
+                            <span class="text-[11px] text-emerald-300/80 mt-1 block">มีสิทธิ์รายงานตัว/มอบตัว</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 flex items-center justify-center">
+                            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-purple-500/30 relative overflow-hidden">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">มอบตัว & ออกรหัส นศ. แล้ว</p>
+                            <h3 id="kpi-enrolled" class="text-3xl font-mono font-extrabold text-purple-400 mt-1">0</h3>
+                            <span id="kpi-gpax-avg" class="text-[11px] font-mono text-purple-300 mt-1 block">GPAX เฉลี่ย: 0.00</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-400/30 text-purple-300 flex items-center justify-center">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Charts Row: Department + Level -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- กราฟแท่งเปรียบเทียบยอดผู้สมัครแยกตามแผนกวิชา -->
+                <div class="lg:col-span-8 glass-card p-6 rounded-3xl border border-white/15">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <div>
+                            <h3 class="font-bold text-white text-base">1. กราฟสรุปยอดผู้สมัครแยกตามสาขาวิชา / แผนกวิชา (ปวช. vs ปวส.)</h3>
+                            <p class="text-xs text-slate-400">เปรียบเทียบจำนวนผู้สมัครในทั้ง 9 แผนกวิชาหลักของวิทยาลัย</p>
+                        </div>
+                        <span class="text-xs font-mono bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 px-3 py-1 rounded-full">9 แผนกวิชา</span>
+                    </div>
+                    <div class="h-80 w-full">
+                        <canvas id="chartByDepartment"></canvas>
+                    </div>
+                </div>
+
+                <!-- กราฟสัดส่วนระดับชั้น -->
+                <div class="lg:col-span-4 glass-card p-6 rounded-3xl border border-white/15 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-white text-base">2. สัดส่วนผู้สมัครแยกตามระดับชั้น</h3>
+                        <p class="text-xs text-slate-400">ปวช. / ปวส. (สายตรง) / ปวส. (ม.6/ต่างสาขา)</p>
+                    </div>
+                    <div class="h-56 w-full flex items-center justify-center my-2">
+                        <canvas id="chartByLevel"></canvas>
+                    </div>
+                    <div id="levelLegendSummary" class="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3"></div>
+                </div>
+            </div>
+
+            <!-- Second Row: School + Province + Referral Channel -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- กราฟแยกตามโรงเรียนเดิม -->
+                <div class="lg:col-span-4 glass-card p-6 rounded-3xl border border-white/15">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-white text-base">3. สถิติแยกตามโรงเรียนเดิม (Top Schools)</h3>
+                        <p class="text-xs text-slate-400">วางแผนการออกแนะแนวตามโรงเรียนเครือข่าย</p>
+                    </div>
+                    <div class="h-60 w-full">
+                        <canvas id="chartBySchool"></canvas>
+                    </div>
+                </div>
+
+                <!-- กราฟแยกตามจังหวัด -->
+                <div class="lg:col-span-4 glass-card p-6 rounded-3xl border border-white/15">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-white text-base">4. สถิติแยกตามจังหวัดภูมิลำเนา</h3>
+                        <p class="text-xs text-slate-400">กระจายตามพื้นที่จังหวัดของผู้สมัคร</p>
+                    </div>
+                    <div class="h-60 w-full">
+                        <canvas id="chartByProvince"></canvas>
+                    </div>
+                </div>
+
+                <!-- กราฟแยกตามช่องทางที่รู้จักวิทยาลัย (ผู้แนะนำแนะแนว) -->
+                <div class="lg:col-span-4 glass-card p-6 rounded-3xl border border-white/15">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-white text-base">5. ช่องทางที่รู้จักวิทยาลัย (ผู้แนะนำแนะแนว)</h3>
+                        <p class="text-xs text-slate-400">ประเมินผลการประชาสัมพันธ์และการแนะแนว</p>
+                    </div>
+                    <div class="h-60 w-full">
+                        <canvas id="chartByChannel"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Third Row: Quota Progress Table -->
+            <div class="glass-card p-6 rounded-3xl border border-white/15">
+                <div class="mb-4 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-white text-base">ตารางติดตามยอดผู้สมัครรายแผนกวิชา เทียบเป้าหมายโควตา (Quota Target)</h3>
+                        <p class="text-xs text-slate-400">แสดงจำนวนผู้สมัคร ปวช., ปวส. และเปอร์เซ็นต์ความสำเร็จรายแผนก</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="border-b border-white/15 text-[11px] text-slate-400 uppercase font-mono">
+                                <th class="py-2.5 px-3">แผนกวิชา / สาขาวิชา</th>
+                                <th class="py-2.5 px-2 text-center">ปวช.</th>
+                                <th class="py-2.5 px-2 text-center">ปวส.</th>
+                                <th class="py-2.5 px-2 text-center">รวม</th>
+                                <th class="py-2.5 px-3">ความคืบหน้าเทียบโควตา</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deptSummaryTableBody" class="divide-y divide-white/10"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================================
+             VIEW 4: ADMIN BACK-END MANAGEMENT, STUDENT ID & ศธ.02 EXPORT
+             ========================================================================= -->
+        <section id="view-admin" class="tab-view hidden space-y-6">
+            <!-- Back-End Executive Summary KPI Cards (4 Cards Matching Reference Layout) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- KPI 1: ผู้สมัครทั้งหมด -->
+                <div class="glass-card rounded-2xl border border-white/15 p-5 shadow-xl flex items-center justify-between transition hover:-translate-y-0.5">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-slate-400">ผู้สมัครทั้งหมด</p>
+                        <h3 id="admin-kpi-total" class="text-3xl font-extrabold text-white mt-1.5 font-sans">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/25 flex items-center justify-center text-blue-500 flex-shrink-0">
+                        <i data-lucide="users" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 2: รอตรวจสอบเอกสาร -->
+                <div class="glass-card rounded-2xl border border-white/15 p-5 shadow-xl flex items-center justify-between transition hover:-translate-y-0.5">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-slate-400">รอตรวจสอบเอกสาร</p>
+                        <h3 id="admin-kpi-pending" class="text-3xl font-extrabold text-amber-500 mt-1.5 font-sans">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-500 flex-shrink-0">
+                        <i data-lucide="clock" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 3: ผ่านการคัดเลือก -->
+                <div class="glass-card rounded-2xl border border-white/15 p-5 shadow-xl flex items-center justify-between transition hover:-translate-y-0.5">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-slate-400">ผ่านการคัดเลือก</p>
+                        <h3 id="admin-kpi-approved" class="text-3xl font-extrabold text-teal-500 mt-1.5 font-sans">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-teal-500/15 border border-teal-500/25 flex items-center justify-center text-teal-500 flex-shrink-0">
+                        <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                    </div>
+                </div>
+
+                <!-- KPI 4: มอบตัวแล้ว -->
+                <div class="glass-card rounded-2xl border border-white/15 p-5 shadow-xl flex items-center justify-between transition hover:-translate-y-0.5">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-slate-400">มอบตัวแล้ว</p>
+                        <h3 id="admin-kpi-enrolled" class="text-3xl font-extrabold text-emerald-500 mt-1.5 font-sans">0</h3>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center text-emerald-500 flex-shrink-0">
+                        <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back-End Dual Analytics Charts (Department Doughnut & PR Channel Vertical Bar) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Chart: ยอดผู้สมัครแยกตามสาขาวิชา -->
+                <div class="glass-card rounded-3xl border border-white/15 p-6 shadow-xl">
+                    <div class="flex items-center gap-2.5 mb-4">
+                        <div class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-yellow-400">
+                            <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                        </div>
+                        <h3 class="text-base font-extrabold text-white">ยอดผู้สมัครแยกตามสาขาวิชา</h3>
+                    </div>
+                    <div class="h-72 w-full flex items-center justify-center">
+                        <canvas id="adminChartDept"></canvas>
+                    </div>
+                </div>
+
+                <!-- Right Chart: สถิติช่องทางประชาสัมพันธ์ -->
+                <div class="glass-card rounded-3xl border border-white/15 p-6 shadow-xl">
+                    <div class="flex items-center gap-2.5 mb-4">
+                        <div class="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-blue-400">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        </div>
+                        <h3 class="text-base font-extrabold text-white">สถิติช่องทางประชาสัมพันธ์</h3>
+                    </div>
+                    <div class="h-72 w-full">
+                        <canvas id="adminChartChannel"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl border border-white/15 p-6 shadow-2xl">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase text-emerald-300 bg-emerald-500/20 border border-emerald-400/30 px-2.5 py-0.5 rounded-md">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Staff Authenticated Session
+                            </span>
+                            <span id="adminActiveUserLabel" class="text-xs font-mono text-cyan-300">ผู้ใช้งาน: เจ้าหน้าที่งานทะเบียน</span>
+                        </div>
+                        <h2 class="text-2xl font-extrabold text-white">ระบบจัดการผู้สมัคร ตรวจเอกสาร ออกรหัสนักศึกษา และส่งออก ศธ.02</h2>
+                        <p class="text-xs text-slate-400">ค้นหาและกรองข้อมูลตามปีการศึกษา ระดับชั้น และสาขาวิชา พร้อมปุ่มดูไฟล์แนบ เปลี่ยนสถานะ บันทึกการมอบตัว และส่งออก Excel/CSV</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <button onclick="openNotificationConfigModal()" class="inline-flex items-center space-x-2 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 px-4 py-2.5 rounded-xl text-xs font-bold transition">
+                            <i data-lucide="bell-ring" class="w-4 h-4"></i>
+                            <span>แจ้งเตือนอัตโนมัติ (LINE / อีเมล)</span>
+                        </button>
+                        <button onclick="exportToCSV()" class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 px-4 py-2.5 rounded-xl text-xs font-extrabold transition shadow-lg shadow-cyan-500/20">
+                            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                            <span>ส่งออก Excel / CSV (มาตรฐาน ศธ.02)</span>
+                        </button>
+                        <button onclick="resetDemoDatabase()" class="inline-flex items-center space-x-1.5 bg-white/10 hover:bg-white/15 text-slate-300 px-3 py-2.5 rounded-xl text-xs font-medium transition">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                            <span>รีเซ็ตข้อมูลตัวอย่าง</span>
+                        </button>
+                        <button onclick="handleStaffLogout()" class="inline-flex items-center space-x-1.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-400/30 px-3 py-2.5 rounded-xl text-xs font-bold transition">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            <span>ออกจากระบบ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters: Search + Academic Year + Level + Department + Status -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 pt-5">
+                    <div class="lg:col-span-3 relative">
+                        <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+                        <input type="text" id="adminSearch" oninput="renderAdminTable()" placeholder="ค้นหาชื่อ, เลขบัตรฯ, โรงเรียน, รหัส นศ..." class="cyber-input w-full pl-10 pr-4 py-2.5 rounded-xl text-xs">
+                    </div>
+                    <div class="lg:col-span-2">
+                        <select id="adminFilterYear" onchange="renderAdminTable()" class="cyber-input w-full px-3 py-2.5 rounded-xl text-xs font-semibold">
+                            <option value="ALL">ทุกปีการศึกษา</option>
+                            <option value="2570" selected>ปีการศึกษา 2570</option>
+                            <option value="2569">ปีการศึกษา 2569</option>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <select id="adminFilterLevel" onchange="renderAdminTable()" class="cyber-input w-full px-3 py-2.5 rounded-xl text-xs">
+                            <option value="ALL">ทุกระดับชั้น</option>
+                            <option value="ปวช.">ระดับ ปวช.</option>
+                            <option value="ปวส. (สายตรง)">ปวส. (สายตรง)</option>
+                            <option value="ปวส. (ม.6/ปวช. ต่างสาขา)">ปวส. (ม.6/ต่างสาขา)</option>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-3">
+                        <select id="adminFilterDept" onchange="renderAdminTable()" class="cyber-input w-full px-3 py-2.5 rounded-xl text-xs">
+                            <option value="ALL">ทุกสาขาวิชา / แผนกวิชา</option>
+                        </select>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <select id="adminFilterStatus" onchange="renderAdminTable()" class="cyber-input w-full px-3 py-2.5 rounded-xl text-xs">
+                            <option value="ALL">ทุกสถานะผู้สมัคร</option>
+                            <option value="รอตรวจสอบ">รอตรวจสอบ</option>
+                            <option value="เอกสารไม่ครบ">เอกสารไม่ครบ</option>
+                            <option value="ผ่านการคัดเลือก">ผ่านการคัดเลือก</option>
+                            <option value="มอบตัวแล้ว">มอบตัวแล้ว</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="mt-5 overflow-x-auto border border-white/10 rounded-2xl">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-900/90 border-b border-white/10 text-[11px] font-mono text-slate-400 uppercase">
+                                <th class="py-3.5 px-4">เลขผู้สมัคร / รหัส นศ.</th>
+                                <th class="py-3.5 px-4">ชื่อ-นามสกุล / เลขบัตรฯ</th>
+                                <th class="py-3.5 px-4">ปีการศึกษา / ระดับชั้น / สาขาวิชา</th>
+                                <th class="py-3.5 px-3 text-center">โรงเรียนเดิม (GPAX)</th>
+                                <th class="py-3.5 px-3 text-center">ดูไฟล์แนบ</th>
+                                <th class="py-3.5 px-3 text-center">เปลี่ยนสถานะด่วน</th>
+                                <th class="py-3.5 px-4 text-right">ออกรหัส & มอบตัว / PDF</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody" class="divide-y divide-white/10"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================================
+         MODAL 1: OFFICIAL A4 PDF PREVIEW & PRINT (EXACT QUOTA FORM)
+         ========================================================================= -->
+    <div id="pdfModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md overflow-y-auto flex items-start justify-center p-2 sm:p-6">
+        <div class="bg-slate-900 rounded-3xl shadow-2xl max-w-5xl w-full overflow-hidden my-4 border border-white/20">
+            <!-- Modal Action Bar -->
+            <div class="bg-slate-950 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 no-print">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                        <i data-lucide="file-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base">ระบบสร้างเอกสารราชการอัตโนมัติ (Official A4 PDF Generator)</h3>
+                        <p class="text-xs text-slate-400">ตรงตามแบบฟอร์มใบสมัครโควตา ปีการศึกษา ๒๕๗๐ ของวิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="bg-slate-900 p-1 rounded-xl border border-white/10 flex items-center text-xs">
+                        <button id="btnDocTypeApp" onclick="switchDocumentMode('application')" class="px-3 py-1.5 rounded-lg bg-amber-400 text-slate-950 font-bold transition">
+                            1. ใบสมัครโควตา
+                        </button>
+                        <button id="btnDocTypeEnroll" onclick="switchDocumentMode('enrollment')" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white font-medium transition">
+                            2. ใบมอบตัวนักศึกษา
+                        </button>
+                    </div>
+
+                    <button onclick="downloadApplicantPDF()" class="inline-flex items-center space-x-1.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition shadow-lg">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>ดาวน์โหลด PDF</span>
+                    </button>
+                    <button onclick="printApplicantDocument()" class="inline-flex items-center space-x-1.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-4 py-2 rounded-xl text-xs font-extrabold transition shadow-lg">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span>สั่งพิมพ์ (Print A4)</span>
+                    </button>
+                    <button onclick="closePdfModal()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- A4 Sheet Container -->
+            <div class="p-4 sm:p-8 overflow-x-auto flex justify-center bg-slate-800/70">
+                <div id="a4-paper-content" class="a4-page bg-white text-black shadow-2xl relative font-sarabun">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 2: AI SMART MAJOR ADVISOR (แนะนำแผนกวิชาอัจฉริยะ)
+         ========================================================================= -->
+    <div id="aiAdvisorModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl max-w-xl w-full overflow-hidden border border-cyan-500/40 shadow-2xl">
+            <div class="bg-gradient-to-r from-cyan-900/80 via-blue-900/80 to-slate-900 px-6 py-4 flex items-center justify-between border-b border-white/15">
+                <div class="flex items-center space-x-2.5">
+                    <i data-lucide="bot" class="w-6 h-6 text-cyan-300"></i>
+                    <div>
+                        <h3 class="font-bold text-white text-sm sm:text-base">AI Smart Career & Major Advisor</h3>
+                        <p class="text-[11px] text-cyan-200">ระบบวิเคราะห์ความถนัดเพื่อแนะนำแผนกวิชาที่เหมาะสมที่สุด</p>
+                    </div>
+                </div>
+                <button onclick="closeAiAdvisorModal()" class="text-slate-300 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-xs text-slate-300">เลือกความสนใจหรือทักษะที่คุณชอบด้านล่าง ระบบ AI จะจับคู่แผนกวิชาที่มีโอกาสได้งานสูงของวิทยาลัยและเลือกใส่ในใบสมัครให้ทันที:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="applyAiRecommendation('ช่างไฟฟ้ากำลัง', 'เมคคาทรอนิกส์และหุ่นยนต์', 'สายวิศวกรรมไฟฟ้าและระบบอัตโนมัติในโรงงานอุตสาหกรรม (SCG & นิคมฯ)')" class="p-4 rounded-2xl border border-white/15 bg-slate-900/70 hover:border-cyan-400 text-left transition group">
+                        <div class="text-cyan-400 font-bold text-xs flex items-center justify-between">
+                            <span>⚡ ชอบระบบไฟฟ้า / หุ่นยนต์ / AI โรงงาน</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 transition"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">แนะนำ: แผนกช่างไฟฟ้ากำลัง & เมคคาทรอนิกส์ฯ</p>
+                    </button>
+                    <button onclick="applyAiRecommendation('ช่างยนต์ (เทคนิคเครื่องกล)', 'ช่างกลโรงงาน (เทคนิคการผลิต)', 'สายเครื่องกล ยานยนต์สมัยใหม่ (EV) และเครื่องจักรกลซีเอ็นซี')" class="p-4 rounded-2xl border border-white/15 bg-slate-900/70 hover:border-amber-400 text-left transition group">
+                        <div class="text-amber-400 font-bold text-xs flex items-center justify-between">
+                            <span>🔧 ชอบเครื่องยนต์ / รถยนต์ EV / เครื่องจักร</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 transition"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">แนะนำ: แผนกช่างยนต์ & ช่างกลโรงงาน</p>
+                    </button>
+                    <button onclick="applyAiRecommendation('เทคโนโลยีธุรกิจดิจิทัล', 'การบัญชี', 'สายเทคโนโลยีสารสนเทศ คอมพิวเตอร์ธุรกิจ และบริหารการเงินดิจิทัล')" class="p-4 rounded-2xl border border-white/15 bg-slate-900/70 hover:border-emerald-400 text-left transition group">
+                        <div class="text-emerald-400 font-bold text-xs flex items-center justify-between">
+                            <span>💻 ชอบคอมพิวเตอร์ / กราฟิก / ธุรกิจออนไลน์</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 transition"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">แนะนำ: เทคโนโลยีธุรกิจดิจิทัล & การบัญชี</p>
+                    </button>
+                    <button onclick="applyAiRecommendation('การจัดการโลจิสติกส์และซัพพลายเชน', 'การบัญชี', 'สายบริหารจัดการคลังสินค้า ขนส่งอัจฉริยะ และซัพพลายเชน')" class="p-4 rounded-2xl border border-white/15 bg-slate-900/70 hover:border-purple-400 text-left transition group">
+                        <div class="text-purple-400 font-bold text-xs flex items-center justify-between">
+                            <span>📦 ชอบการวางแผนขนส่ง / โลจิสติกส์ / คลังสินค้า</span>
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 transition"></i>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">แนะนำ: การจัดการโลจิสติกส์ฯ & การบัญชี</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 3: COMMAND PALETTE (CTRL+K QUICK SEARCH)
+         ========================================================================= -->
+    <div id="commandPaletteModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-start justify-center pt-20 p-4 no-print">
+        <div class="glass-card rounded-2xl max-w-lg w-full overflow-hidden border border-cyan-500/40 shadow-2xl">
+            <div class="p-3.5 border-b border-white/10 flex items-center space-x-3">
+                <i data-lucide="terminal" class="w-5 h-5 text-cyan-400"></i>
+                <input type="text" id="cmdSearchInput" oninput="renderCommandPaletteResults()" placeholder="พิมพ์ชื่อผู้สมัคร, รหัสใบสมัคร, หรือคำสั่งด่วน..." class="bg-transparent text-white text-sm w-full focus:outline-none">
+                <button onclick="closeCommandPalette()" class="text-xs text-slate-400 hover:text-white font-mono px-2 py-0.5 rounded bg-white/5">ESC</button>
+            </div>
+            <div id="cmdResultsList" class="p-2 max-h-80 overflow-y-auto space-y-1 text-xs"></div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 4: ADMIN REVIEW & ENROLLMENT
+         ========================================================================= -->
+    <div id="adminManageModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden border border-white/20">
+            <div class="bg-slate-900/90 text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center space-x-2.5">
+                    <i data-lucide="user-check" class="w-5 h-5 text-amber-400"></i>
+                    <h3 class="font-bold text-sm sm:text-base">ตรวจสอบเอกสาร / อนุมัติผล / ออกรหัสนักศึกษา</h3>
+                </div>
+                <button onclick="closeAdminManageModal()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="adminManageModalBody" class="p-6 space-y-5 max-h-[82vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 5: LINE NOTIFY / LINE OA / EMAIL NOTIFICATION CONFIG & LOGS
+         ========================================================================= -->
+    <div id="notifyModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md overflow-y-auto flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl shadow-2xl max-w-xl w-full overflow-hidden border border-emerald-500/30">
+            <div class="bg-emerald-900/60 text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center space-x-2.5">
+                    <i data-lucide="bell-ring" class="w-5 h-5 text-emerald-300"></i>
+                    <h3 class="font-bold text-sm sm:text-base">ระบบแจ้งเตือนอัตโนมัติ (LINE Notify / LINE OA / อีเมล)</h3>
+                </div>
+                <button onclick="closeNotificationConfigModal()" class="text-emerald-200 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-center justify-between p-3.5 bg-emerald-500/10 rounded-2xl border border-emerald-500/30">
+                    <div>
+                        <p class="text-xs font-bold text-emerald-300">เปิดใช้งานแจ้งเตือนอัตโนมัติ (Real-Time Auto Notification)</p>
+                        <p class="text-[11px] text-slate-300">แจ้งเตือนทันทีเมื่อมีผู้สมัครใหม่เข้ามา หรือแจ้งผู้สมัครเมื่อเจ้าหน้าที่ตรวจเอกสารเสร็จ</p>
+                    </div>
+                    <input type="checkbox" id="notifyEnabledToggle" checked class="w-5 h-5 accent-emerald-400 rounded cursor-pointer">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">LINE Notify / LINE OA Token</label>
+                        <input type="text" id="lineTokenInput" value="LINE_OA_CHANNEL_TOKEN_TC2570_NEXUS" class="cyber-input w-full rounded-xl px-3.5 py-2 text-xs font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">อีเมลงานทะเบียน & SMTP Sender</label>
+                        <input type="email" id="notifyEmailInput" value="registrar@thaluangtech.ac.th" class="cyber-input w-full rounded-xl px-3.5 py-2 text-xs font-mono">
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-slate-300">ประวัติการส่งแจ้งเตือน (LINE Notify, LINE OA & Email Logs)</span>
+                        <button onclick="testSendLineNotify()" class="text-xs text-emerald-400 font-semibold hover:underline">+ ทดสอบส่งแจ้งเตือน</button>
+                    </div>
+                    <div id="notifyLogsContainer" class="bg-slate-950 text-emerald-400 font-mono text-xs p-3.5 rounded-xl h-40 overflow-y-auto space-y-1.5 border border-white/10"></div>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="closeNotificationConfigModal()" class="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-xl text-xs font-semibold">บันทึกและปิดหน้าต่าง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 8: STAFF / ADMIN AUTHENTICATION LOGIN (ล็อกอินสำหรับเจ้าหน้าที่มุมขวาบน)
+         ========================================================================= -->
+    <div id="staffLoginModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl max-w-md w-full overflow-hidden border border-amber-400/40 shadow-2xl">
+            <div class="bg-gradient-to-r from-blue-950 via-blue-900/90 to-slate-900 px-6 py-5 flex items-center justify-between border-b border-amber-400/25">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-400/20 border border-amber-400/40 text-yellow-300 flex items-center justify-center">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-white text-base">เข้าสู่ระบบสำหรับเจ้าหน้าที่ (Back-End)</h3>
+                        <p class="text-[11px] text-amber-200">งานทะเบียนและวัดผล วิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์</p>
+                    </div>
+                </div>
+                <button onclick="closeStaffLoginModal()" class="text-slate-300 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form onsubmit="handleStaffLoginSubmit(event)" class="p-6 space-y-4">
+                <div class="p-3.5 rounded-2xl bg-blue-500/15 border border-blue-400/30 text-xs text-blue-200 flex items-center justify-between">
+                    <div>
+                        <span class="font-bold block text-yellow-300">บัญชีทดสอบสำหรับผู้ดูแลระบบ:</span>
+                        <span class="font-mono text-[11px]">Username: <b>admin</b> | Password: <b>2570</b></span>
+                    </div>
+                    <button type="button" onclick="fillDemoAdminCredentials()" class="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-[11px] hover:bg-yellow-300 transition">
+                        กรอกอัตโนมัติ
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">ชื่อผู้ใช้งาน (Username / รหัสเจ้าหน้าที่)</label>
+                    <input type="text" id="staffUsernameInput" required value="admin" placeholder="เช่น admin หรือ registrar" class="cyber-input w-full rounded-xl px-4 py-2.5 text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">รหัสผ่าน (Password)</label>
+                    <input type="password" id="staffPasswordInput" required value="2570" placeholder="••••••••" class="cyber-input w-full rounded-xl px-4 py-2.5 text-sm font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">บทบาทหน้าที่ (Role)</label>
+                    <select id="staffRoleInput" class="cyber-input w-full rounded-xl px-3.5 py-2.5 text-xs font-semibold">
+                        <option value="เจ้าหน้าที่งานทะเบียน (Registrar Admin)">เจ้าหน้าที่งานทะเบียน (Registrar Admin)</option>
+                        <option value="คณะกรรมการรับสมัครและคัดเลือกโควตา">คณะกรรมการรับสมัครและคัดเลือกโควตา</option>
+                        <option value="ผู้บริหารสถานศึกษา (Executive Viewer)">ผู้บริหารสถานศึกษา (Executive Viewer)</option>
+                    </select>
+                </div>
+                <p id="staffLoginError" class="text-xs text-rose-400 font-semibold hidden">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง (ใช้ admin / 2570)</p>
+
+                <div class="flex items-center justify-end gap-2.5 pt-2">
+                    <button type="button" onclick="closeStaffLoginModal()" class="px-4 py-2.5 rounded-xl border border-white/15 text-xs font-semibold text-slate-300">ยกเลิก</button>
+                    <button type="submit" class="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 hover:from-yellow-300 hover:to-amber-400 text-slate-950 px-6 py-2.5 rounded-xl text-xs font-extrabold shadow-lg shadow-amber-400/30 transition">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                        <span>ยืนยันเข้าสู่ระบบเจ้าหน้าที่</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 9: ATTACHED DOCUMENTS VIEWER (หน้าต่างเปิดดูไฟล์แนบของผู้สมัคร)
+         ========================================================================= -->
+    <div id="attachmentViewerModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl max-w-2xl w-full overflow-hidden border border-cyan-500/40 shadow-2xl">
+            <div class="bg-slate-900 px-6 py-4 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center space-x-2.5">
+                    <i data-lucide="folder-open" class="w-5 h-5 text-cyan-400"></i>
+                    <div>
+                        <h3 class="font-bold text-white text-sm sm:text-base">ตรวจสอบเอกสารหลักฐานแนบของผู้สมัคร</h3>
+                        <p id="attachmentModalSubtitle" class="text-xs text-slate-400">-</p>
+                    </div>
+                </div>
+                <button onclick="closeAttachmentViewerModal()" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="attachmentViewerBody" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 6: SUBMISSION SUCCESS TICKET CARD (การ์ดยื่นใบสมัครสำเร็จ)
+         ========================================================================= -->
+    <div id="successTicketModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl max-w-lg w-full overflow-hidden border border-cyan-500/40 shadow-2xl p-6 sm:p-8 text-center space-y-5 relative">
+            <button onclick="closeSuccessTicketModal()" class="absolute top-4 right-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-4xl">🎉</div>
+            <div class="space-y-1">
+                <h3 class="text-xl sm:text-2xl font-extrabold text-white">ยินดีด้วย! บันทึกใบสมัครเรียนของคุณสำเร็จแล้ว</h3>
+                <p class="text-xs text-slate-300">ข้อมูลและไฟล์แนบถูกจัดเก็บในฐานข้อมูลงานทะเบียนของวิทยาลัยอย่างปลอดภัย</p>
+            </div>
+
+            <!-- Digital Admission Ticket Card -->
+            <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 border border-cyan-500/30 text-left shadow-xl space-y-3">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <span class="text-xs font-bold text-white">วิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์</span>
+                    <span class="text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 px-2.5 py-0.5 rounded-full">QUOTA 2570</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400">เลขที่ใบสมัครทางการ</span>
+                    <div id="ticketAppId" class="text-3xl font-mono font-extrabold text-cyan-400 tracking-wider mt-0.5">Q70-0001</div>
+                </div>
+                <div class="text-xs text-slate-300 space-y-1">
+                    <div>ผู้สมัคร: <strong id="ticketAppName" class="text-white">-</strong></div>
+                    <div>สถานะ: <span class="text-amber-300 font-semibold">รอตรวจสอบหลักฐาน</span></div>
+                    <p class="text-[11px] text-slate-400 pt-1">กรุณาดาวน์โหลดหรือบันทึกไฟล์ PDF ใบสมัครนี้ไว้เป็นหลักฐานสำหรับยื่นมอบตัว</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+                <button id="ticketBtnDownloadPdf" class="inline-flex items-center space-x-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white px-5 py-3 rounded-full text-xs font-bold shadow-lg transition">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    <span>ดาวน์โหลดใบสมัคร (PDF รายบุคคล)</span>
+                </button>
+                <button id="ticketBtnPrint" class="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-slate-100 px-5 py-3 rounded-full text-xs font-bold shadow transition">
+                    <i data-lucide="printer" class="w-4 h-4"></i>
+                    <span>สั่งพิมพ์ A4</span>
+                </button>
+                <button onclick="closeSuccessTicketModal(); switchTab('status');" class="inline-flex items-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-5 py-3 rounded-full text-xs font-extrabold shadow transition">
+                    <i data-lucide="scan-search" class="w-4 h-4"></i>
+                    <span>ตรวจสอบสถานะ</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================================
+         MODAL 7: RE-UPLOAD / EDIT DOCUMENT (อัปโหลดเอกสารหลักฐานแก้ไขเพิ่มเติม)
+         ========================================================================= -->
+    <div id="reuploadDocModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 no-print">
+        <div class="glass-card rounded-3xl max-w-md w-full overflow-hidden border border-amber-500/40 shadow-2xl">
+            <div class="bg-slate-900 px-6 py-4 flex items-center justify-between border-b border-white/10">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="upload-cloud" class="w-5 h-5 text-amber-400"></i>
+                    <h3 class="font-bold text-white text-sm sm:text-base">อัปโหลดเอกสารหลักฐานแก้ไขเพิ่มเติม</h3>
+                </div>
+                <button onclick="closeReuploadModal()" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-xs text-slate-300">กรุณาเลือกไฟล์เอกสารที่ต้องการอัปโหลดแก้ไขตามที่เจ้าหน้าที่ได้แจ้งไว้ (ไฟล์ PDF, JPG, PNG ไม่เกิน 2.5 MB)</p>
+                <input type="hidden" id="reuploadAppId">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">ประเภทเอกสารที่ต้องการแก้ไข</label>
+                    <select id="reuploadDocType" class="cyber-input w-full rounded-xl px-3.5 py-2.5 text-xs">
+                        <option value="transcript">1. ใบแสดงผลการเรียน (รบ.1) 5 ภาคเรียน</option>
+                        <option value="idcard">2. สำเนาบัตรประชาชน / สำเนาทะเบียนบ้าน</option>
+                        <option value="cert">3. สำเนาเกียรติบัตร / ใบรับรองความสามารถพิเศษ</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1.5">เลือกไฟล์ใหม่</label>
+                    <input type="file" id="reuploadFileInput" accept="image/jpeg,image/png,application/pdf" class="cyber-input w-full rounded-xl px-3 py-2 text-xs">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button onclick="closeReuploadModal()" class="px-4 py-2 rounded-xl border border-white/15 text-xs text-slate-300">ยกเลิก</button>
+                    <button onclick="submitReuploadDocument()" class="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-xs font-extrabold shadow">บันทึกการส่งเอกสารแก้ไข</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-5 mt-12 relative z-10 no-print">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-2">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="Logo" class="h-5 w-5 object-contain">
+                <span class="font-bold text-slate-200">TC NEXUS 2570 • วิทยาลัยเทคนิคท่าหลวงซิเมนต์ไทยอนุสรณ์</span>
+            </div>
+            <div class="font-mono text-[11px] text-slate-400">Next-Gen Admission Platform • Live Digital Twin PDF • ศธ.02 Ready</div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

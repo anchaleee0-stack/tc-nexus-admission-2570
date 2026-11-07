@@ -1,0 +1,466 @@
+/* =========================================================================
+   TC NEXUS 2570 - COSMIC ROYAL BLUE & GOLDEN YELLOW DARK THEME + SHOOTING STARS
+   ========================================================================= */
+
+html.dark body {
+    background: radial-gradient(ellipse at top, #0b1e47 0%, #050e24 55%, #020612 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Aurora Ambient Background Animation (Royal Blue & Golden Yellow) */
+.aurora-blob {
+    position: absolute;
+    filter: blur(115px);
+    border-radius: 9999px;
+    opacity: 0.36;
+    animation: floatAurora 18s infinite alternate ease-in-out;
+}
+.blob-1 {
+    width: 560px;
+    height: 560px;
+    background: radial-gradient(circle, #2563eb 0%, #1e3a8a 72%);
+    top: -120px;
+    left: -120px;
+}
+.blob-2 {
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle, #facc15 0%, #d97706 72%);
+    top: 15%;
+    right: -160px;
+    opacity: 0.25;
+    animation-delay: -5s;
+}
+.blob-3 {
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, #0284c7 0%, #0f172a 75%);
+    bottom: -100px;
+    left: 26%;
+    animation-delay: -10s;
+}
+
+@keyframes floatAurora {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(45px, -35px) scale(1.08); }
+    100% { transform: translate(-35px, 40px) scale(0.95); }
+}
+
+/* Shooting Stars (Meteors) Layer & Keyframe Animations */
+.shooting-stars-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shooting-star {
+    position: absolute;
+    top: -40px;
+    width: 150px;
+    height: 2px;
+    border-radius: 999px;
+    opacity: 0;
+    transform: rotate(-35deg);
+    animation: meteorStreak 7s linear infinite;
+}
+
+.shooting-star::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.star-gold-1,
+.star-gold-2,
+.star-gold-3 {
+    background: linear-gradient(90deg, rgba(254, 240, 138, 1) 0%, rgba(250, 204, 21, 0.75) 30%, rgba(250, 204, 21, 0) 100%);
+    filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.85));
+}
+.star-gold-1::before,
+.star-gold-2::before,
+.star-gold-3::before {
+    background: #fef08a;
+    box-shadow: 0 0 12px 3px #facc15;
+}
+
+.star-blue-1,
+.star-blue-2,
+.star-blue-3 {
+    background: linear-gradient(90deg, rgba(224, 242, 254, 1) 0%, rgba(56, 189, 248, 0.8) 30%, rgba(37, 99, 235, 0) 100%);
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.85));
+}
+.star-blue-1::before,
+.star-blue-2::before,
+.star-blue-3::before {
+    background: #e0f2fe;
+    box-shadow: 0 0 12px 3px #38bdf8;
+}
+
+.star-gold-1 { top: 6%; right: 12%; animation-delay: 0.4s; animation-duration: 5.5s; }
+.star-blue-1 { top: 18%; right: -5%; animation-delay: 2.1s; animation-duration: 6.8s; width: 190px; }
+.star-gold-2 { top: -2%; right: 42%; animation-delay: 3.7s; animation-duration: 6.2s; width: 170px; }
+.star-blue-2 { top: 32%; right: 8%; animation-delay: 5.2s; animation-duration: 7.4s; }
+.star-gold-3 { top: 12%; right: 68%; animation-delay: 1.5s; animation-duration: 8.1s; width: 140px; }
+.star-blue-3 { top: 2%; right: 26%; animation-delay: 4.4s; animation-duration: 5.9s; width: 180px; }
+
+@keyframes meteorStreak {
+    0% {
+        transform: rotate(-35deg) translateX(0);
+        opacity: 0;
+    }
+    6% {
+        opacity: 1;
+    }
+    28% {
+        transform: rotate(-35deg) translateX(-950px);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(-35deg) translateX(-950px);
+        opacity: 0;
+    }
+}
+
+.bg-grid-pattern {
+    background-image: 
+        linear-gradient(to right, rgba(96, 165, 250, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(250, 204, 21, 0.04) 1px, transparent 1px);
+    background-size: 36px 36px;
+}
+
+/* Futuristic Sapphire-Blue & Gold Glass Card */
+.glass-card {
+    background: linear-gradient(145deg, rgba(10, 25, 58, 0.78) 0%, rgba(6, 15, 38, 0.84) 100%);
+    border-color: rgba(59, 130, 246, 0.25);
+    box-shadow: 0 12px 32px -4px rgba(2, 6, 23, 0.65), inset 0 1px 0 0 rgba(250, 204, 21, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* Light Mode Overrides when toggled */
+html.light body {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+html.light .aurora-blob {
+    opacity: 0.12;
+}
+html.light .bg-grid-pattern {
+    background-image: 
+        linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+}
+html.light header {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border-bottom-color: #e2e8f0 !important;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+}
+html.light header h1.bg-clip-text {
+    background-image: linear-gradient(90deg, #0f172a 0%, #1e3a8a 55%, #dc2626 100%) !important;
+    -webkit-text-fill-color: transparent !important;
+}
+html.light nav {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+}
+html.light .nav-pill {
+    color: #475569;
+}
+html.light .nav-pill:hover {
+    color: #0f172a;
+    background: rgba(15, 23, 42, 0.06);
+}
+html.light .nav-pill.active {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #dc2626 0%, #1d4ed8 100%) !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+}
+html.light .nav-pill.active i {
+    color: #ffffff !important;
+}
+html.light .glass-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* Light Mode Typography Contrast Fixes */
+html.light .text-white:not(.from-red-600):not(.from-rose-600):not(.bg-red-600):not(.bg-rose-600):not(.bg-emerald-600):not(.bg-blue-600) {
+    color: #0f172a !important;
+}
+html.light .from-red-600.text-white,
+html.light .from-rose-600.text-white,
+html.light .bg-red-600.text-white,
+html.light .bg-rose-600.text-white,
+html.light .from-red-600.to-amber-500.text-white {
+    color: #ffffff !important;
+}
+html.light .text-slate-100,
+html.light .text-slate-200 {
+    color: #1e293b !important;
+}
+html.light .text-slate-300 {
+    color: #334155 !important;
+}
+html.light .text-slate-400,
+html.light .text-slate-500 {
+    color: #64748b !important;
+}
+
+/* High-contrast semantic accent text in Light Mode */
+html.light .text-cyan-200,
+html.light .text-cyan-300,
+html.light .text-cyan-400 {
+    color: #0369a1 !important;
+}
+html.light .text-amber-200,
+html.light .text-amber-300,
+html.light .text-amber-400 {
+    color: #b45309 !important;
+}
+html.light .text-amber-500 {
+    color: #d97706 !important;
+}
+html.light .text-emerald-200,
+html.light .text-emerald-300,
+html.light .text-emerald-400 {
+    color: #047857 !important;
+}
+html.light .text-emerald-500 {
+    color: #059669 !important;
+}
+html.light .text-teal-500 {
+    color: #0d9488 !important;
+}
+html.light .text-rose-200,
+html.light .text-rose-300,
+html.light .text-rose-400,
+html.light .text-red-300 {
+    color: #be123c !important;
+}
+html.light .text-purple-200,
+html.light .text-purple-300,
+html.light .text-purple-400 {
+    color: #6d28d9 !important;
+}
+
+/* Light Mode Surface & Container Overrides */
+html.light .cyber-input {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+html.light .cyber-input::placeholder {
+    color: #94a3b8 !important;
+}
+html.light .cyber-input option {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+html.light .bg-slate-950,
+html.light .bg-slate-950\/95,
+html.light .bg-slate-950\/90,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/75 {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html.light .bg-slate-900,
+html.light .bg-slate-900\/95,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/60,
+html.light .bg-slate-900\/50,
+html.light .bg-slate-900\/40 {
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0 !important;
+}
+html.light .bg-slate-800,
+html.light .bg-slate-800\/80 {
+    background-color: #e2e8f0 !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+}
+html.light .bg-cyan-950\/60 {
+    background-color: #e0f2fe !important;
+    border-color: #7dd3fc !important;
+}
+html.light .bg-white\/5,
+html.light .bg-white\/10,
+html.light .bg-white\/15 {
+    background-color: #f1f5f9 !important;
+}
+html.light .hover\:bg-white\/5:hover,
+html.light .hover\:bg-white\/10:hover {
+    background-color: #e2e8f0 !important;
+}
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20 {
+    border-color: #e2e8f0 !important;
+}
+html.light .divide-white\/10 > :not([hidden]) ~ :not([hidden]) {
+    border-color: #e2e8f0 !important;
+}
+/* Keep modal backdrop dark translucent in Light Mode */
+html.light .fixed.inset-0.bg-slate-950\/80,
+html.light .fixed.inset-0.bg-slate-950\/85 {
+    background-color: rgba(15, 23, 42, 0.65) !important;
+}
+
+/* Cyber Input Controls (Blue & Gold Dark Theme) */
+.cyber-input {
+    background: rgba(7, 18, 44, 0.88);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    color: #f8fafc;
+    transition: all 0.2s ease;
+}
+.cyber-input:focus {
+    outline: none;
+    border-color: #facc15;
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.22);
+}
+.cyber-input option {
+    background: #07122c;
+    color: #f8fafc;
+}
+
+/* Navigation Pills (Royal Blue & Golden Yellow Active State) */
+.nav-pill {
+    color: #93c5fd;
+}
+.nav-pill:hover {
+    color: #fef08a;
+    background: rgba(59, 130, 246, 0.14);
+}
+.nav-pill.active {
+    color: #040b1e;
+    background: linear-gradient(135deg, #fef08a 0%, #facc15 55%, #f59e0b 100%);
+    font-weight: 800;
+    box-shadow: 0 4px 22px rgba(250, 204, 21, 0.4);
+}
+.nav-pill.active i {
+    color: #040b1e !important;
+}
+
+/* Scaled Wrapper for the Live Digital Twin A4 Preview in Right Sidebar */
+.live-a4-scale-wrapper {
+    width: 100%;
+    height: 675px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+}
+.live-a4-scale-wrapper > .a4-page {
+    transform: scale(0.58);
+    transform-origin: top center;
+    flex-shrink: 0;
+}
+
+/* Official A4 Paper Styling (210mm x 297mm) - ALWAYS PURE WHITE PAPER */
+.a4-page {
+    width: 210mm;
+    min-height: 296mm;
+    padding: 15mm 18mm 15mm 20mm;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Sarabun', sans-serif;
+    line-height: 1.65;
+    font-size: 14.5px;
+}
+
+.a4-page * {
+    color: #000000;
+}
+
+/* Dotted underline utility that looks like the real paper form */
+.dotted-line {
+    border-bottom: 1px dotted #1e293b;
+    display: inline-block;
+    padding: 0 6px;
+    text-align: center;
+    font-weight: 600;
+    color: #0f172a !important;
+    min-height: 22px;
+    line-height: 1.35;
+}
+
+.checkbox-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #000;
+    margin-right: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* Ensure all modals and overlays stay strictly hidden until activated */
+.hidden,
+[hidden] {
+    display: none !important;
+}
+
+/* Print Media Query - Ensures clean A4 output when using Browser Print */
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    #pdfModal {
+        position: static !important;
+        display: block !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+    }
+
+    #pdfModal > div {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    #pdfModal > div > div {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    .a4-page {
+        width: 210mm !important;
+        height: 297mm !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 15mm 18mm 15mm 20mm !important;
+        page-break-after: always;
+    }
+}
